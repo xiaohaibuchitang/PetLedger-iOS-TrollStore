@@ -1,0 +1,313 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>宠物记账 iOS 原型</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./phosphor-icons.js"></script>
+  </head>
+  <body>
+    <div class="stage">
+      <main class="phone-shell" aria-label="宠物记账 App 原型">
+        <div class="status-bar" aria-hidden="true">
+          <span>9:41</span>
+          <div class="status-icons">
+            <i class="ph-fill ph-cell-signal-full"></i>
+            <i class="ph-fill ph-wifi-high"></i>
+            <i class="ph ph-battery-full"></i>
+          </div>
+        </div>
+
+        <section class="screen screen-active" data-screen="home">
+          <header class="top-header">
+            <div>
+              <h1>早安，今天也要好好记账哦</h1>
+              <p>7月1日  星期二</p>
+            </div>
+            <button class="icon-button" type="button" aria-label="提醒">
+              <i class="ph ph-bell"></i>
+            </button>
+          </header>
+
+          <div class="mode-switch" aria-label="账本模式">
+            <button class="mode-button mode-active" type="button" data-mode="personal">个人</button>
+            <button class="mode-button" type="button" data-mode="couple">情侣</button>
+          </div>
+
+          <section class="finance-panel" aria-label="记账概览">
+            <div class="metric-grid">
+              <article>
+                <span>今日支出</span>
+                <strong id="todaySpend">¥68.00</strong>
+                <small>较昨日 <em>-¥26.50</em></small>
+              </article>
+              <article>
+                <span>本月支出</span>
+                <strong id="monthSpend">¥1,268.50</strong>
+                <small>预算 ¥3,000.00</small>
+              </article>
+              <article>
+                <span>剩余额度</span>
+                <strong class="green" id="remainBudget">¥1,731.50</strong>
+                <small>剩余 <span id="remainRate">57.7%</span></small>
+              </article>
+            </div>
+            <div class="progress-wrap" aria-label="预算进度">
+              <div class="progress-track">
+                <span class="progress-fill" id="budgetFill"></span>
+              </div>
+              <div class="progress-labels">
+                <span>0%</span>
+                <span id="budgetRate">预算进度 42.3%</span>
+                <span>100%</span>
+              </div>
+            </div>
+            <button class="primary-action" type="button" data-open-add>
+              <i class="ph ph-plus-circle"></i>
+              <span>记一笔</span>
+            </button>
+          </section>
+
+          <section class="pet-card" aria-label="宠物精灵互动场景">
+            <div class="pet-topline">
+              <div class="level-pill">
+                <i class="ph-fill ph-heart"></i>
+                <span>Lv.3</span>
+                <div class="mini-track"><span></span></div>
+                <span>68/120</span>
+              </div>
+              <button class="text-link" type="button" data-screen-link="pet">宠物工坊</button>
+            </div>
+            <div class="pet-scene" id="petScene">
+              <img class="room-image" src="./assets/pet-room.png" alt="宠物精灵的小窝场景" />
+              <div class="path-dot dot-one"></div>
+              <div class="path-dot dot-two"></div>
+              <div class="path-dot dot-three"></div>
+              <button class="hotspot plant" type="button" data-pet-action="给小植物浇水，精灵会记得你的细心。">
+                <i class="ph-fill ph-plant"></i>
+                <span>小植物</span>
+              </button>
+              <button class="hotspot snack" type="button" data-pet-action="喂了一点零食，今天的记账也更有动力。">
+                <i class="ph-fill ph-bowl-food"></i>
+                <span>零食</span>
+              </button>
+              <button class="hotspot toy" type="button" data-pet-action="精灵追着玩具跑了一圈，心情 +8。">
+                <i class="ph-fill ph-star"></i>
+                <span>玩具</span>
+              </button>
+              <button class="hotspot bank" type="button" data-pet-action="摸摸存钱罐，本周储蓄目标又近了一点。">
+                <i class="ph-fill ph-piggy-bank"></i>
+                <span>存钱罐</span>
+              </button>
+              <button class="hotspot nest" type="button" data-pet-action="精灵回小窝休息，晚点会提醒你复盘账单。">
+                <i class="ph-fill ph-house-line"></i>
+                <span>小窝</span>
+              </button>
+              <img class="pet-spirit" id="petSpirit" src="./assets/pet-spirit-transparent.png" alt="会走动的宠物精灵" />
+              <div class="pet-bubble" id="petBubble">一起加油，今天记得很清楚呢</div>
+            </div>
+          </section>
+
+          <section class="list-panel" aria-label="最近账单">
+            <div class="section-title">
+              <h2>最近账单</h2>
+              <button type="button" data-screen-link="bills">全部 <i class="ph ph-caret-right"></i></button>
+            </div>
+            <div class="transaction-list" id="recentTransactions"></div>
+          </section>
+        </section>
+
+        <section class="screen" data-screen="bills">
+          <header class="plain-header">
+            <div>
+              <h1>账单</h1>
+              <p>清楚看见每一笔钱流向哪里</p>
+            </div>
+            <button class="icon-button" type="button" data-open-add aria-label="新增账单">
+              <i class="ph ph-plus"></i>
+            </button>
+          </header>
+          <div class="filter-row">
+            <button class="filter-active" type="button">全部</button>
+            <button type="button">餐饮</button>
+            <button type="button">交通</button>
+            <button type="button">学习</button>
+          </div>
+          <section class="list-panel bill-page-panel">
+            <div class="transaction-list" id="allTransactions"></div>
+          </section>
+        </section>
+
+        <section class="screen" data-screen="budget">
+          <header class="plain-header">
+            <div>
+              <h1>预算</h1>
+              <p>给这个月留一点呼吸空间</p>
+            </div>
+            <button class="icon-button" type="button" aria-label="预算设置">
+              <i class="ph ph-sliders-horizontal"></i>
+            </button>
+          </header>
+          <section class="budget-hero">
+            <span>本月预算</span>
+            <strong>¥3,000</strong>
+            <p>已使用 <b id="budgetHeroRate">42.3%</b>，还可以安心花 <b id="budgetHeroRemain">¥1,731.50</b></p>
+            <div class="ring-row">
+              <div class="budget-ring"><span id="ringRate">42%</span></div>
+              <div>
+                <h2>精灵建议</h2>
+                <p id="budgetAdvice">餐饮预算还很稳，咖啡可以控制在每周 3 次。</p>
+              </div>
+            </div>
+          </section>
+          <section class="category-panel">
+            <h2>分类预算</h2>
+            <div class="category-budget">
+              <span><i class="ph-fill ph-fork-knife"></i> 餐饮</span>
+              <div><em style="width:58%"></em></div>
+              <b>¥580 / ¥1,000</b>
+            </div>
+            <div class="category-budget">
+              <span><i class="ph-fill ph-train"></i> 交通</span>
+              <div><em style="width:32%"></em></div>
+              <b>¥96 / ¥300</b>
+            </div>
+            <div class="category-budget">
+              <span><i class="ph-fill ph-book-open"></i> 学习</span>
+              <div><em style="width:22%"></em></div>
+              <b>¥110 / ¥500</b>
+            </div>
+          </section>
+        </section>
+
+        <section class="screen" data-screen="pet">
+          <header class="plain-header">
+            <div>
+              <h1>宠物</h1>
+              <p>它会在你记账时慢慢长大</p>
+            </div>
+            <button class="icon-button" type="button" aria-label="宠物设置">
+              <i class="ph ph-gear-six"></i>
+            </button>
+          </header>
+          <section class="pet-workshop">
+            <div class="workshop-scene">
+              <img src="./assets/pet-room.png" alt="宠物房间" />
+              <img class="workshop-pet" src="./assets/pet-spirit-transparent.png" alt="宠物精灵" />
+            </div>
+            <div class="workshop-copy">
+              <strong>小离 Lv.3</strong>
+              <span>连续记账 5 天，今天状态很好</span>
+            </div>
+          </section>
+          <section class="custom-panel">
+            <h2>自定义</h2>
+            <div class="swatch-row" aria-label="毛色">
+              <button class="swatch swatch-one active-swatch" type="button" aria-label="浅绿毛色"></button>
+              <button class="swatch swatch-two" type="button" aria-label="奶白毛色"></button>
+              <button class="swatch swatch-three" type="button" aria-label="蜜桃毛色"></button>
+              <button class="swatch swatch-four" type="button" aria-label="雾蓝毛色"></button>
+            </div>
+            <button class="settings-cell" type="button">
+              <span><i class="ph-fill ph-ribbon"></i> 配饰</span>
+              <em>柔软叶子发夹</em>
+              <i class="ph ph-caret-right"></i>
+            </button>
+            <button class="settings-cell" type="button">
+              <span><i class="ph-fill ph-bed"></i> 小窝</span>
+              <em>苔藓绒绒窝</em>
+              <i class="ph ph-caret-right"></i>
+            </button>
+          </section>
+        </section>
+
+        <section class="screen" data-screen="profile">
+          <header class="plain-header">
+            <div>
+              <h1>我的</h1>
+              <p>账本、情侣同步和提醒设置</p>
+            </div>
+          </header>
+          <section class="profile-card">
+            <div class="avatar">Y</div>
+            <div>
+              <strong>盐树栖</strong>
+              <span>个人账本 · 情侣账本已开启</span>
+            </div>
+          </section>
+          <section class="custom-panel">
+            <button class="settings-cell" type="button">
+              <span><i class="ph-fill ph-users-three"></i> 情侣共享账本</span>
+              <em>已同步</em>
+              <i class="ph ph-caret-right"></i>
+            </button>
+            <button class="settings-cell" type="button">
+              <span><i class="ph-fill ph-bell-ringing"></i> 记账提醒</span>
+              <em>21:30</em>
+              <i class="ph ph-caret-right"></i>
+            </button>
+            <button class="settings-cell" type="button">
+              <span><i class="ph-fill ph-shield-check"></i> 数据安全</span>
+              <em>本地加密</em>
+              <i class="ph ph-caret-right"></i>
+            </button>
+          </section>
+        </section>
+
+        <nav class="tab-bar" aria-label="主导航">
+          <button class="tab-active" type="button" data-tab="home">
+            <i class="ph-fill ph-house"></i>
+            <span>首页</span>
+          </button>
+          <button type="button" data-tab="bills">
+            <i class="ph ph-receipt"></i>
+            <span>账单</span>
+          </button>
+          <button type="button" data-tab="budget">
+            <i class="ph ph-chart-pie-slice"></i>
+            <span>预算</span>
+          </button>
+          <button type="button" data-tab="pet">
+            <i class="ph ph-paw-print"></i>
+            <span>宠物</span>
+          </button>
+          <button type="button" data-tab="profile">
+            <i class="ph ph-user-circle"></i>
+            <span>我的</span>
+          </button>
+        </nav>
+
+        <div class="sheet-backdrop" id="sheetBackdrop"></div>
+        <aside class="add-sheet" id="addSheet" aria-label="快速记账" aria-hidden="true">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">
+            <h2>记一笔</h2>
+            <button class="icon-button" type="button" data-close-add aria-label="关闭">
+              <i class="ph ph-x"></i>
+            </button>
+          </div>
+          <label class="amount-field">
+            <span>金额</span>
+            <input id="amountInput" type="number" min="0" step="0.01" value="18" />
+          </label>
+          <div class="category-picker" aria-label="分类">
+            <button class="category-choice choice-active" type="button" data-category="餐饮" data-icon="ph-fork-knife">餐饮</button>
+            <button class="category-choice" type="button" data-category="交通" data-icon="ph-train">交通</button>
+            <button class="category-choice" type="button" data-category="学习" data-icon="ph-book-open">学习</button>
+            <button class="category-choice" type="button" data-category="日用" data-icon="ph-shopping-bag">日用</button>
+          </div>
+          <label class="note-field">
+            <span>备注</span>
+            <input id="noteInput" type="text" value="早餐" />
+          </label>
+          <button class="primary-action sheet-submit" type="button" id="submitExpense">完成</button>
+        </aside>
+
+        <div class="toast" id="toast">已记账，小离也跟着安心了一点</div>
+      </main>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>

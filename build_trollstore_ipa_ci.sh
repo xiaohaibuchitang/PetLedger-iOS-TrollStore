@@ -1,42 +1,46 @@
-#!/usr/bin/env bash
+#!/bin/zsh
 set -euo pipefail
 
 APP_NAME="PetLedger"
 SCHEME="PetLedger"
-CONFIGURATION="Release"
-DERIVED_DATA="$PWD/build/DerivedData"
-DIST_DIR="$PWD/dist"
-APP_PATH="$DERIVED_DATA/Build/Products/${CONFIGURATION}-iphoneos/${APP_NAME}.app"
+BUNDLE_ID="${BUNDLE_ID:-com.petledger.prototype}"
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+BUILD_DIR="$ROOT_DIR/build-ci"
+PRODUCTS_DIR="$BUILD_DIR/Build/Products/Release-iphoneos"
+APP_PATH="$PRODUCTS_DIR/$APP_NAME.app"
+PAYLOAD_DIR="$BUILD_DIR/ipa/Payload"
+IPA_PATH="$ROOT_DIR/PetLedger-TrollStore.ipa"
 
-rm -rf "$DERIVED_DATA" "$DIST_DIR" Payload
-mkdir -p "$DIST_DIR"
+rm -rf "$BUILD_DIR" "$IPA_PATH"
 
 xcodebuild \
-  -project PetLedger.xcodeproj \
+  -project "$ROOT_DIR/PetLedger.xcodeproj" \
   -scheme "$SCHEME" \
-  -configuration "$CONFIGURATION" \
+  -configuration Release \
   -sdk iphoneos \
-  -derivedDataPath "$DERIVED_DATA" \
+  -destination "generic/platform=iOS" \
+  -derivedDataPath "$BUILD_DIR" \
+  build \
   CODE_SIGNING_ALLOWED=NO \
   CODE_SIGNING_REQUIRED=NO \
   CODE_SIGN_IDENTITY="" \
-  build
+  PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID"
 
-if [ -d "$APP_PATH/Frameworks" ]; then
-  find "$APP_PATH/Frameworks" -type d -name "*.framework" -print0 | while IFS= read -r -d '' framework; do
+mkdir -p "$PAYLOAD_DIR"
+cp -R "$APP_PATH" "$PAYLOAD_DIR/"
+
+if [ -d "$PAYLOAD_DIR/$APP_NAME.app/Frameworks" ]; then
+  find "$PAYLOAD_DIR/$APP_NAME.app/Frameworks" -type d -name "*.framework" -print0 | while IFS= read -r -d '' framework; do
     /usr/bin/codesign --force --sign - --timestamp=none "$framework"
   done
 
-  find "$APP_PATH/Frameworks" -type f -name "*.dylib" -print0 | while IFS= read -r -d '' dylib; do
+  find "$PAYLOAD_DIR/$APP_NAME.app/Frameworks" -type f -name "*.dylib" -print0 | while IFS= read -r -d '' dylib; do
     /usr/bin/codesign --force --sign - --timestamp=none "$dylib"
   done
 fi
 
-/usr/bin/codesign --force --sign - --timestamp=none --entitlements entitlements.plist "$APP_PATH"
+/usr/bin/codesign --force --sign - --timestamp=none --entitlements "$ROOT_DIR/entitlements.plist" "$PAYLOAD_DIR/$APP_NAME.app"
 
-mkdir -p Payload
-cp -R "$APP_PATH" Payload/
-/usr/bin/zip -qry "$DIST_DIR/${APP_NAME}-TrollStore.ipa" Payload
-rm -rf Payload
+(cd "$BUILD_DIR/ipa" && /usr/bin/zip -qry "$IPA_PATH" Payload)
 
-echo "Created $DIST_DIR/${APP_NAME}-TrollStore.ipa"
+echo "Created: $IPA_PATH"

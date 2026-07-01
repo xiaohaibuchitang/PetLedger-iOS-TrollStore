@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1600"
+   LastUpgradeVersion = "1500"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5F2F4B982C17010100A0C123"
+               BlueprintIdentifier = "A10000000000000000000040"
                BuildableName = "PetLedger.app"
                BlueprintName = "PetLedger"
                ReferencedContainer = "container:PetLedger.xcodeproj">
@@ -27,8 +27,7 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      shouldAutocreateTestPlan = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -44,7 +43,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5F2F4B982C17010100A0C123"
+            BlueprintIdentifier = "A10000000000000000000040"
             BuildableName = "PetLedger.app"
             BlueprintName = "PetLedger"
             ReferencedContainer = "container:PetLedger.xcodeproj">
@@ -61,7 +60,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "5F2F4B982C17010100A0C123"
+            BlueprintIdentifier = "A10000000000000000000040"
             BuildableName = "PetLedger.app"
             BlueprintName = "PetLedger"
             ReferencedContainer = "container:PetLedger.xcodeproj">
@@ -76,4 +75,3 @@
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
-
