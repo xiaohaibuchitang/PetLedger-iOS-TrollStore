@@ -22,15 +22,17 @@ xcodebuild \
   CODE_SIGN_IDENTITY="" \
   build
 
-if command -v brew >/dev/null 2>&1; then
-  brew list ldid >/dev/null 2>&1 || brew install ldid || true
+if [ -d "$APP_PATH/Frameworks" ]; then
+  find "$APP_PATH/Frameworks" -type d -name "*.framework" -print0 | while IFS= read -r -d '' framework; do
+    /usr/bin/codesign --force --sign - --timestamp=none "$framework"
+  done
+
+  find "$APP_PATH/Frameworks" -type f -name "*.dylib" -print0 | while IFS= read -r -d '' dylib; do
+    /usr/bin/codesign --force --sign - --timestamp=none "$dylib"
+  done
 fi
 
-if command -v ldid >/dev/null 2>&1; then
-  ldid -S entitlements.plist "$APP_PATH/$APP_NAME"
-else
-  codesign -s - --force --entitlements entitlements.plist "$APP_PATH/$APP_NAME"
-fi
+/usr/bin/codesign --force --sign - --timestamp=none --entitlements entitlements.plist "$APP_PATH"
 
 mkdir -p Payload
 cp -R "$APP_PATH" Payload/
@@ -38,4 +40,3 @@ cp -R "$APP_PATH" Payload/
 rm -rf Payload
 
 echo "Created $DIST_DIR/${APP_NAME}-TrollStore.ipa"
-
