@@ -24,4 +24,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: PetLedger-TrollStore-IPA
-          path: dist/PetLedger-TrollStore.ipa
+          path: PetLedger-TrollStore.ipa
